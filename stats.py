@@ -22,5 +22,18 @@ def longest_word_board():
     print(f"Board with longest word\n - Board: {entry[0]}\n - Nos words: {entry[1]}\n - Longest word: {entry[2]}")
 
 
+def averages():
+    content = []
+    with open("Boards.txt", "r") as B_file:
+        for line in B_file:
+            content.append(line.split(","))
+    tot_words = 0
+    for i in range(len(content)):
+        tot_words += int(content[i][1])
+    av_words = tot_words / len(content)
+    print(f"Average nos words: {round(av_words, 1)}")
+
+
 max_words_board()
 longest_word_board()
+averages()
