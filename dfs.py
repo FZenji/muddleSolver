@@ -1,13 +1,14 @@
 # Python program to print all paths from a source to destination.
-
+import random
 from collections import defaultdict
 
 with open('WordDictionary.txt', 'rb', 0) as file:
     w_set = set(file.read().splitlines())
 
-words = []
-gridL = list(input().lower().split(" "))
-print(gridL)
+letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+           "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+# gridL = list(input().lower().split(" "))
+# print(gridL)
 
 grid = [[i + j for i in range(4)] for j in range(0, 13, 4)]
 
@@ -15,7 +16,6 @@ grid = [[i + j for i in range(4)] for j in range(0, 13, 4)]
 # This class represents a directed graph
 # using adjacency list representation
 class Graph:
-
     def __init__(self, vertices):
         # No. of vertices
         self.V = vertices
@@ -91,19 +91,41 @@ class Graph:
         self.all_paths_util(s, d, visited, path)
 
 
-# Create a graph given in the above diagram
+def long_words():
+    with open("LongWords.txt", "r+") as LW_file:
+        contents = LW_file.readlines()
+        LW_file.writelines(("".join(gridL) + "," + word + "\n"
+                            for word in words if len(word) >= 7 and word not in contents))
+
+
+def boards():
+    with open("Boards.txt", "a") as B_file:
+        B_file.write("".join(gridL) + "," + str(len(words)) + "," + str(max(words, key=len)) + "\n")
+
+
+def fake_long_words():
+    with open("FakeLongWords.txt", "r+") as LW_file:
+        contents = LW_file.readlines()
+        LW_file.writelines(("".join(gridL) + "," + word + "\n"
+                            for word in words if len(word) >= 7 and word not in contents))
+
+
+def fake_boards():
+    with open("FakeBoards.txt", "a") as B_file:
+        B_file.write("".join(gridL) + "," + str(len(words)) + "," + str(max(words, key=len)) + "\n")
+
+
 g = Graph(16)
-
-print("All words:")
-for start in range(16):
-    for dest in range(16):
-        g.all_paths(start, dest)
-print(f"Count: {len(words)}")
-
-with open("LongWords.txt", "r+") as LW_file:
-    contents = LW_file.readlines()
-    LW_file.writelines(("".join(gridL) + "," + word + "\n"
-                        for word in words if len(word) >= 7 and word not in contents))
-
-with open("Boards.txt", "a") as B_file:
-    B_file.write("".join(gridL) + "," + str(len(words)) + "," + str(max(words, key=len)) + "\n")
+for _ in range(20):
+    words = []
+    print("All words:")
+    gridL = [random.choice(letters) for _ in range(16)]
+    print(gridL)
+    for start in range(16):
+        for dest in range(16):
+            g.all_paths(start, dest)
+    print(f"Count: {len(words)}")
+    # long_words()
+    # boards()
+    fake_long_words()
+    fake_boards()
